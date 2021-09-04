@@ -7,7 +7,7 @@ import org.checkerframework.checker.units.qual.A;
 import org.springframework.stereotype.Component;
 
 @Component
-public class BookResolver  implements GraphQLQueryResolver{
+public class BookResolver {
     public Book bookById(int id) {
         Book book = new Book();
         book.setId(1022);
