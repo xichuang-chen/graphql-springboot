@@ -1,1 +1,5 @@
-
+spring:
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/java/main

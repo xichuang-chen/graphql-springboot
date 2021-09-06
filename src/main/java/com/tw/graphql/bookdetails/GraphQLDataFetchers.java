@@ -1,68 +1,39 @@
 package com.tw.graphql.bookdetails;
 
-import com.google.common.collect.ImmutableMap;
+import com.alibaba.fastjson.JSONObject;
+import com.tw.graphql.dto.Author;
+import com.tw.graphql.dto.Book;
 import graphql.schema.DataFetcher;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Component
 public class GraphQLDataFetchers {
-    private static List<Map<String, String>> books = Arrays.asList(
-            ImmutableMap.of("id", "book-1",
-                    "name", "Harry Potter and the Philosopher's Stone",
-                    "pageCount", "223",
-                    "authorId", "author-1"),
-            ImmutableMap.of("id", "book-2",
-                    "name", "Moby Dick",
-                    "pageCount", "635",
-                    "authorId", "author-2"),
-            ImmutableMap.of("id", "book-3",
-                    "name", "Interview with the vampire",
-                    "pageCount", "371",
-                    "authorId", "author-3")
-    );
-
-    private static List<Map<String, String>> authors = Arrays.asList(
-            ImmutableMap.of("id", "author-1",
-                    "firstName", "Joanne",
-                    "lastName", "Rowling"),
-            ImmutableMap.of("id", "author-2",
-                    "firstName", "Herman",
-                    "lastName", "Melville"),
-            ImmutableMap.of("id", "author-3",
-                    "firstName", "Anne",
-                    "lastName", "Rice")
-    );
-
     public DataFetcher getBookByIdDataFetcher() {
         return dataFetchingEnvironment -> {
             String bookId = dataFetchingEnvironment.getArgument("id");
-            return books
-                    .stream()
-                    .filter(book -> book.get("id").equals(bookId))
-                    .findFirst()
-                    .orElse(null);
+            List<Book> books = new ArrayList<>();
+            for (int i = 0; i < 3; i++) {
+                Book book = new Book();
+                book.setId(1022 + i);
+                book.setPageCount(33 + i);
+                book.setName("cxc" + i);
+                books.add(book);
+            }
+            return books;
         };
     }
 
     public DataFetcher getAuthorDataFetcher() {
         return dataFetchingEnvironment -> {
-            Map<String, String> book = dataFetchingEnvironment.getSource();
-            String authorId = book.get("authorId");
-            return authors
-                    .stream()
-                    .filter(author -> author.get("id").equals(authorId))
-                    .findFirst()
-                    .orElse(null);
+            JSONObject source = (JSONObject) JSONObject.toJSON(dataFetchingEnvironment.getSource());
+            Author author = new Author();
+            author.setLastName(source.get("name").toString());
+            author.setFirstName("chen");
+            author.setId((Integer) source.get("id"));
+            return author;
         };
-
-
-    }
-
-    public static void main(String[] args) {
-        System.out.println(authors.getClass().getName());
     }
 }
