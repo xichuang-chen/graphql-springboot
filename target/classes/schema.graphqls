@@ -6,11 +6,16 @@ type Book {
   id: ID
   name: String
   pageCount: Int
-  author: Author
+  author(name: String): Author
 }
 
 type Author {
   id: ID
-  firstName: String
-  lastName: String
+  name: String
+  honor: Honor
+}
+
+type Honor {
+  count: Int
+  details: [String]
 }
