@@ -3,10 +3,10 @@ type Query {
 }
 
 type Book {
-  id: ID
-  name: String
+  id: ID!
+  name: String!
   pageCount: Int
-  author(name: String): Author
+  author(name: String!): Author
 }
 
 type Author {

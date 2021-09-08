@@ -41,3 +41,21 @@ graphql server resolve data process:
     为何为父节点，因为现在已经进入author: Author dataFetcher，author父亲为Book, Book 拥有这些属性（来自apollo中graphql说法）
 - apollo graphql resolver-chain 参考链接: [resolver chains](https://www.apollographql.com/docs/apollo-server/data/resolvers/#resolver-chains)  
 虽然java不用apollo，也可以了解一下apollo 如何解释 resolver chains
+
+### graphql 强制类型
+- schema中定义的类型加 `!` 则该为强制类型，如果在入参中，则说明查询该入参必须有  
+  例如：schema 中 author(name: String!), `name` 为必须传入的参数，而 bookById 中 `id`
+可传可省略
+```js
+type Query {
+  bookById(id: ID): [Book]
+}
+type Book {
+  id: ID!
+  name: String!
+  pageCount: Int
+  author(name: String!): Author
+}
+```
+- schema 中 field 类型加 `!` 说明该 field 必须返回非null值，否则就会报错  
+  例如 `Book` 中的 `id` 以及 `name`，如果返回值为null，则报错。而其他field可以返回null.
